@@ -1,0 +1,20 @@
+{
+  "name": "plupload2-angular",
+  "version": "1.0.0",
+  "description": "A wrapper for plupload2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kurideja/plupload2-angular.git"
+  },
+  "author": "Gytis Taločka <kurideja@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/kurideja/plupload2-angular/issues"
+  },
+  "homepage": "https://github.com/kurideja/plupload2-angular",
+  "devDependencies": {
+    "del": "^1.2.0",
+    "gulp": "^3.8.11",
+    "gulp-concat": "^2.5.2",
+    "gulp-load-plugins": "^0.10.0"
+  }
+}
