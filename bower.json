@@ -1,0 +1,25 @@
+{
+  "name": "plupload2-angular",
+  "version": "1.0.0",
+  "homepage": "https://github.com/kurideja/plupload2-angular",
+  "authors": [
+    "kurideja <kurideja@gmail.com>"
+  ],
+  "description": "An AngularJS wrapper for plupload2",
+  "main": "[\"./dist/plupload2-angular.js\"]",
+  "keywords": [
+    "plupload",
+    "moxie",
+    "angular",
+    "file",
+    "upload"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

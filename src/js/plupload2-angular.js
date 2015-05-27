@@ -3,7 +3,7 @@
   'use strict';
 
   angular
-    .module('plupload2.angular', [])
+    .module('plupload2-angular', [])
 
     .provider('plUploadService', function() {
 
