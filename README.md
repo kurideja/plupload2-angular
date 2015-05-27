@@ -1,2 +1,5 @@
 # plupload2-angular
-Wrapper for plupload 2 plugin
+This is an AngularJS wrapper for plupload2 plugin.
+
+Available for install via bower:
+<code>bower install plupload2-angular</code>
