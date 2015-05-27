@@ -46,7 +46,7 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
   'use strict';
 
   angular
-    .module('plupload2.angular', [])
+    .module('plupload2-angular', [])
 
     .provider('plUploadService', function() {
 
