@@ -12,7 +12,8 @@
     "moxie",
     "angular",
     "file",
-    "upload"
+    "upload",
+    "fileupload"
   ],
   "license": "MIT",
   "ignore": [
