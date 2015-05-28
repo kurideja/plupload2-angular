@@ -31,9 +31,9 @@
     })
     .directive('plUpload', plUpload);
 
-  plUpload.inject = ['plUploadService'];
+  plUpload.inject = ['$timeout', 'plUploadService'];
 
-  function plUpload(plUploadService) {
+  function plUpload($timeout, plUploadService) {
     var directive = {
       restrict: 'A',
       //scope: {
@@ -49,6 +49,7 @@
       scope: {
         plInstance: '=?',
         plMultiParamsModel: '=?',
+        plAreAllCompleted: '=?',
         plFilesModel: '=?',
         plProgressModel: '=?',
         plOnFilesAdded: '&?',
@@ -128,6 +129,7 @@
       uploader.bind('FilesAdded', onFilesAdded);
       uploader.bind('FileUploaded', onFileUploaded);
       uploader.bind('UploadProgress', onUploadProgress);
+      uploader.bind('StateChanged', onStateChanged);
 
 
       /**
@@ -150,6 +152,13 @@
           if(iAttrs.plFilesModel) {
             angular.forEach(files, function(file, key) {
               scope.plFilesModel.push(file);
+
+              if(iAttrs.plProgressModel) {
+                scope.plProgressModel = scope.plProgressModel || 0;
+                scope.plProgressModel /= scope.plFilesModel.length;
+                scope.plProgressModel *= scope.plFilesModel.length - 1;
+              }
+
             })
           }
         });
@@ -162,6 +171,7 @@
       }
 
       function onUploadProgress(up, file) {
+
         if(!iAttrs.plProgressModel) {
           return;
         }
@@ -174,6 +184,10 @@
 
         if(scope.plOnFileProgress) {
           scope.plOnFileProgress();
+        }
+
+        if(scope.plProgressModel === 100) {
+          scope.plIsUploadDisabled = false;
         }
 
         /**
@@ -195,8 +209,6 @@
         }
       }
 
-
-
       /**
       * @desc Handles FileUploaded event
       * @param up
@@ -204,6 +216,7 @@
       * @param res
       */
       function onFileUploaded(up, file, res) {
+
         if(!scope.plOnFileUploaded) {
           return;
         }
@@ -220,12 +233,16 @@
             scope.allUploaded = file.percent === 100;
             if(scope.allUploaded) {
               scope.plOnFileUploaded({$response: res});
-            } else {
-              scope.plOnFileUploaded({$response: res});
             }
           });
         }
 
+      }
+
+      function onStateChanged(up) {
+        $timeout(function() {
+          scope.plAreAllCompleted = up.state === 1;
+        });
       }
 
       /*********

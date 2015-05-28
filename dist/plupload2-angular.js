@@ -74,9 +74,9 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
     })
     .directive('plUpload', plUpload);
 
-  plUpload.inject = ['plUploadService'];
+  plUpload.inject = ['$timeout', 'plUploadService'];
 
-  function plUpload(plUploadService) {
+  function plUpload($timeout, plUploadService) {
     var directive = {
       restrict: 'A',
       //scope: {
@@ -92,6 +92,7 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
       scope: {
         plInstance: '=?',
         plMultiParamsModel: '=?',
+        plAreAllCompleted: '=?',
         plFilesModel: '=?',
         plProgressModel: '=?',
         plOnFilesAdded: '&?',
@@ -171,6 +172,7 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
       uploader.bind('FilesAdded', onFilesAdded);
       uploader.bind('FileUploaded', onFileUploaded);
       uploader.bind('UploadProgress', onUploadProgress);
+      uploader.bind('StateChanged', onStateChanged);
 
 
       /**
@@ -193,6 +195,13 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
           if(iAttrs.plFilesModel) {
             angular.forEach(files, function(file, key) {
               scope.plFilesModel.push(file);
+
+              if(iAttrs.plProgressModel) {
+                scope.plProgressModel = scope.plProgressModel || 0;
+                scope.plProgressModel /= scope.plFilesModel.length;
+                scope.plProgressModel *= scope.plFilesModel.length - 1;
+              }
+
             })
           }
         });
@@ -205,6 +214,7 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
       }
 
       function onUploadProgress(up, file) {
+
         if(!iAttrs.plProgressModel) {
           return;
         }
@@ -217,6 +227,10 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
 
         if(scope.plOnFileProgress) {
           scope.plOnFileProgress();
+        }
+
+        if(scope.plProgressModel === 100) {
+          scope.plIsUploadDisabled = false;
         }
 
         /**
@@ -238,8 +252,6 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
         }
       }
 
-
-
       /**
       * @desc Handles FileUploaded event
       * @param up
@@ -247,6 +259,7 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
       * @param res
       */
       function onFileUploaded(up, file, res) {
+
         if(!scope.plOnFileUploaded) {
           return;
         }
@@ -263,12 +276,16 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
             scope.allUploaded = file.percent === 100;
             if(scope.allUploaded) {
               scope.plOnFileUploaded({$response: res});
-            } else {
-              scope.plOnFileUploaded({$response: res});
             }
           });
         }
 
+      }
+
+      function onStateChanged(up) {
+        $timeout(function() {
+          scope.plAreAllCompleted = up.state === 1;
+        });
       }
 
       /*********
