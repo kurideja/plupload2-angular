@@ -79,16 +79,6 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
   function plUpload($timeout, plUploadService) {
     var directive = {
       restrict: 'A',
-      //scope: {
-      //  plInstance: '=',
-      //  plFilesModel: '=',
-      //  plMultiParamsModel: '=',
-      //  plContainer: '@',
-      //  plOnFileError: '&',
-      //  plOnFilesAdded: '&',
-      //  plOnFileUploaded: '&',
-      //  plOnFileProgress: '&'
-      //},
       scope: {
         plInstance: '=?',
         plMultiParamsModel: '=?',
@@ -160,9 +150,14 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
         scope.plInstance = uploader;
       }
 
-      if(iAttrs.plAutoInit === "true") {
-        uploader.init();
-      }
+      /**
+       * A-HA! This doesn't work well in flash (and maybe silverlight)
+       * Reason: init is called before the files are loaded.
+       * Currently it should be good to init uploader in controller with some delay.
+       */
+      //if(iAttrs.plAutoInit === "true") {
+      //  uploader.init();
+      //}
 
       /****************
        *EVENT BINDINGS*
@@ -197,9 +192,7 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
               scope.plFilesModel.push(file);
 
               if(iAttrs.plProgressModel) {
-                scope.plProgressModel = scope.plProgressModel || 0;
-                scope.plProgressModel /= scope.plFilesModel.length;
-                scope.plProgressModel *= scope.plFilesModel.length - 1;
+                scope.plProgressModel = calculateProgress();
               }
 
             })
@@ -220,36 +213,11 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
         }
 
         if(iAttrs.plFilesModel) {
-          scope.$apply(handleProgressModel);
-        } else {
-          $scope.$apply(setProgressModel);
-        }
-
-        if(scope.plOnFileProgress) {
-          scope.plOnFileProgress();
-        }
-
-        if(scope.plProgressModel === 100) {
-          scope.plIsUploadDisabled = false;
-        }
-
-        /**
-         * @desc handles progress model
-         */
-        function handleProgressModel() {
-          scope.sum = 0;
-          angular.forEach(scope.plFilesModel, function(file, key) {
-            scope.sum += file.percent;
+          scope.$apply(function() {
+            scope.plProgressModel = calculateProgress();
           });
-          scope.plProgressModel = scope.sum / scope.plFilesModel.length;
         }
 
-        /**
-         * desc sets progress model
-         */
-        function setProgressModel() {
-          scope.plProgressModel = file.percent;
-        }
       }
 
       /**
@@ -315,6 +283,18 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
        */
       function getConfigOption(key) {
         return iAttrs[key] || plUploadService.getConfig(key);
+      }
+
+      function calculateProgress() {
+        var total = 0;
+        var loaded = 0;
+
+        angular.forEach(uploader.files, function(file) {
+          total += file.size;
+          loaded += file.loaded;
+        });
+
+        return loaded / total * 100;
       }
 
     }
