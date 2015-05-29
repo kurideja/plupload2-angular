@@ -210,6 +210,7 @@
       function onStateChanged(up) {
         $timeout(function() {
           scope.plAreAllCompleted = up.state === 1;
+          calculateProgress();
         });
       }
 
@@ -242,13 +243,17 @@
         return iAttrs[key] || plUploadService.getConfig(key);
       }
 
+      /**
+       * @desc calculates progress
+       * @returns {number}
+       */
       function calculateProgress() {
         var total = 0;
         var loaded = 0;
 
         angular.forEach(uploader.files, function(file) {
-          total += file.size;
-          loaded += file.loaded;
+          total += 100;
+          loaded += file.percent;
         });
 
         return loaded / total * 100;
