@@ -44,7 +44,8 @@
         plProgressModel: '=?',
         plOnFilesAdded: '&?',
         plOnFileUploaded: '&?',
-        plOnFileError: '&?'
+        plOnFileError: '&?',
+        plOnUploadDone: '&?'
       },
       link: plUploadLink
     };
@@ -144,6 +145,9 @@
       */
       function onFilesAdded(up, files) {
         scope.$apply(function() {
+          if(iAttrs.plAreAllCompleted) {
+            scope.plAreAllCompleted = false;
+          }
           if(iAttrs.plFilesModel) {
             angular.forEach(files, function(file, key) {
               scope.plFilesModel.push(file);
@@ -198,8 +202,7 @@
          */
         function handleWhenFilesModelSet() {
           angular.forEach(scope.plFilesModel, function(file, key) {
-            scope.allUploaded = file.percent === 100;
-            if(scope.allUploaded) {
+            if(file.percent === 100) {
               scope.plOnFileUploaded({$response: res});
             }
           });
@@ -211,6 +214,9 @@
         $timeout(function() {
           scope.plAreAllCompleted = up.state === 1;
           calculateProgress();
+          if(scope.plOnUploadDone && scope.plAreAllCompleted) {
+            scope.plOnUploadDone();
+          }
         });
       }
 
