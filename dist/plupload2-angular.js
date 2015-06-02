@@ -88,7 +88,7 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
         plOnFilesAdded: '&?',
         plOnFileUploaded: '&?',
         plOnFileError: '&?',
-        plOnUploadDone: '&?'
+        plOnStateChanged: '&?'
       },
       link: plUploadLink
     };
@@ -140,7 +140,8 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
       setNoops([
         'plOnFilesAdded',
         'plOnFileUploaded',
-        'plOnFileError'
+        'plOnFileError',
+        'plOnStateChanged'
       ]);
 
       uploader = new plupload.Uploader(options);
@@ -253,13 +254,16 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
 
       }
 
+      /**
+       * @desc handles callbacks and actions when uploader state changes
+       *
+       * @param up
+       */
       function onStateChanged(up) {
         $timeout(function() {
           scope.plAreAllCompleted = up.state === 1;
           calculateProgress();
-          if(scope.plOnUploadDone && scope.plAreAllCompleted) {
-            scope.plOnUploadDone();
-          }
+          scope.plOnStateChanged();
         });
       }
 

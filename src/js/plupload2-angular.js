@@ -45,7 +45,7 @@
         plOnFilesAdded: '&?',
         plOnFileUploaded: '&?',
         plOnFileError: '&?',
-        plOnUploadDone: '&?'
+        plOnStateChanged: '&?'
       },
       link: plUploadLink
     };
@@ -97,7 +97,8 @@
       setNoops([
         'plOnFilesAdded',
         'plOnFileUploaded',
-        'plOnFileError'
+        'plOnFileError',
+        'plOnStateChanged'
       ]);
 
       uploader = new plupload.Uploader(options);
@@ -210,13 +211,16 @@
 
       }
 
+      /**
+       * @desc handles callbacks and actions when uploader state changes
+       *
+       * @param up
+       */
       function onStateChanged(up) {
         $timeout(function() {
           scope.plAreAllCompleted = up.state === 1;
           calculateProgress();
-          if(scope.plOnUploadDone && scope.plAreAllCompleted) {
-            scope.plOnUploadDone();
-          }
+          scope.plOnStateChanged();
         });
       }
 
