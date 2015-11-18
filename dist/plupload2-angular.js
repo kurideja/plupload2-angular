@@ -110,9 +110,12 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
         url: getConfigOption('plUploadPath'),
         flash_swf_url: getConfigOption('plFlashPath'),
         silverlight_xap_url: getConfigOption('plSilverlightPath'),
-        file_data_name: getConfigOption('plFileDataName'),
-        headers: plUploadService.getConfig('headers')
+        file_data_name: getConfigOption('plFileDataName')
       };
+
+      if(plUploadService.getConfig('headers')) {
+        options.headers = plUploadService.getConfig('headers');
+      }
 
       if(iAttrs.plContainer) {
         options.container = iAttrs.plContainer

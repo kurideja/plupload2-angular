@@ -67,9 +67,12 @@
         url: getConfigOption('plUploadPath'),
         flash_swf_url: getConfigOption('plFlashPath'),
         silverlight_xap_url: getConfigOption('plSilverlightPath'),
-        file_data_name: getConfigOption('plFileDataName'),
-        headers: plUploadService.getConfig('headers')
+        file_data_name: getConfigOption('plFileDataName')
       };
+
+      if(plUploadService.getConfig('headers')) {
+        options.headers = plUploadService.getConfig('headers');
+      }
 
       if(iAttrs.plContainer) {
         options.container = iAttrs.plContainer
