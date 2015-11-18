@@ -130,9 +130,9 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
         options.multipart_params = scope.plMultiParamsModel;
       }
 
-      if(options.headers) {
+      if(plUploadService.getConfig('headers')) {
         options.multipart_params = options.multipart_params || {};
-        angular.forEach(options.headers, function(value, key) {
+        angular.forEach(plUploadService.getConfig('headers'), function(value, key) {
           options.multipart_params[key] = value;
         });
       }
