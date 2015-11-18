@@ -71,7 +71,12 @@
       };
 
       if(plUploadService.getConfig('headers')) {
-        options.headers = plUploadService.getConfig('headers');
+        if(!(plUploadService.getConfig('mustIncludeCookies') &&
+          isSilverlightInstalled()
+          && !isFlashBeforeSilverlight(options))) {
+          // If headers are used, cookies are not sent in silverlight runtime.
+          options.headers = plUploadService.getConfig('headers');
+        }
       }
 
       if(iAttrs.plContainer) {
@@ -230,6 +235,53 @@
       /*********
        *HELPERS*
        *********/
+
+      function isFlashBeforeSilverlight(options) {
+        var flashIndex = options.runtimes.indexOf('flash');
+        var silverlightIndex = options.runtimes.indexOf('silverlight');
+
+        if(flashIndex === -1) {
+          return false;
+        }
+        if(silverlightIndex === -1) {
+          return true;
+        }
+
+        return flashIndex < silverlightIndex;
+      }
+
+      /**
+       * Taken from: http://blogs.msdn.com/b/piotrp/archive/2008/05/07/determining-if-silverlight-is-installed-using-javascript.aspx
+       * @returns {boolean}
+       */
+      function isSilverlightInstalled()
+      {
+        var isSilverlightInstalled = false;
+
+        try
+        {
+          //check on IE
+          try
+          {
+            var slControl = new ActiveXObject('AgControl.AgControl');
+            isSilverlightInstalled = true;
+          }
+          catch (e)
+          {
+            //either not installed or not IE. Check Firefox
+            if ( navigator.plugins["Silverlight Plug-In"] )
+            {
+              isSilverlightInstalled = true;
+            }
+          }
+        }
+        catch (e)
+        {
+          //we don't want to leak exceptions. However, you may want
+          //to add exception tracking code here.
+        }
+        return isSilverlightInstalled;
+      }
 
       /**
        * @desc sets noops for undefined callbacks
