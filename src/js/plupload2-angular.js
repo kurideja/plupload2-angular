@@ -87,9 +87,9 @@
         options.multipart_params = scope.plMultiParamsModel;
       }
 
-      if(options.headers) {
+      if(plUploadService.getConfig('headers')) {
         options.multipart_params = options.multipart_params || {};
-        angular.forEach(options.headers, function(value, key) {
+        angular.forEach(plUploadService.getConfig('headers'), function(value, key) {
           options.multipart_params[key] = value;
         });
       }
