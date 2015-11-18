@@ -154,7 +154,9 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
 
       uploader = new plupload.Uploader(options);
 
-      uploader.settings.headers = plUploadService.getConfig('headers');
+      if(options.headers) {
+        uploader.settings.headers = plUploadService.getConfig('headers');
+      }
 
       if(iAttrs.plInstance) {
         scope.plInstance = uploader;
