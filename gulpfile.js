@@ -26,6 +26,10 @@ gulp.task('copy', function() {
     .pipe(gulp.dest('./dist'));
 });
 
+gulp.task('watch-js', function() {
+  return gulp.watch('./src/js/**/*.js', ['build']);
+});
+
 gulp.task('build', ['clean'], function() {
   gulp.start(['copy', 'concat']);
 });

@@ -98,6 +98,10 @@
         options.max_file_size = iAttrs.plMaxFileSize;
       }
 
+      if(iAttrs.plChunkSize) {
+        options.chunk_size = iAttrs.plChunkSize;
+      }
+
       /******
        *INIT*
        ******/
@@ -171,11 +175,11 @@
           }
         });
 
-        scope.plOnFilesAdded();
+        scope.plOnFilesAdded({uploader: up, files: files});
 
-        if(iAttrs.plAutoUpload === "true") {
-          uploader.start();
-        }
+        //if(iAttrs.plAutoUpload === "true") {
+        //  uploader.start();
+        //}
       }
 
       function onUploadProgress(up, file) {
