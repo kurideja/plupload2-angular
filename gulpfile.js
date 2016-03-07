@@ -11,7 +11,7 @@ gulp.task('clean', function(done) {
 gulp.task('concat', function() {
   return gulp.src([
     './src/libs/moxie.min.js',
-    './src/libs/plupload.full.min.js',
+    './src/libs/plupload.dev.js',
     './src/js/plupload2-angular.js'
   ])
     .pipe($.concat('plupload2-angular.js'))
@@ -27,7 +27,7 @@ gulp.task('copy', function() {
 });
 
 gulp.task('watch-js', function() {
-  return gulp.watch('./src/js/**/*.js', ['build']);
+  return gulp.watch('./src/**/*.js', ['build']);
 });
 
 gulp.task('build', ['clean'], function() {

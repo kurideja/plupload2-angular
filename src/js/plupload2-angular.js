@@ -124,15 +124,6 @@
         scope.plInstance = uploader;
       }
 
-      /**
-       * A-HA! This doesn't work well in flash (and maybe silverlight)
-       * Reason: init is called before the files are loaded.
-       * Currently it should be good to init uploader in controller with some delay.
-       */
-      //if(iAttrs.plAutoInit === "true") {
-      //  uploader.init();
-      //}
-
       /****************
        *EVENT BINDINGS*
        ****************/
@@ -177,10 +168,6 @@
         });
 
         scope.plOnFilesAdded({uploader: up, files: files});
-
-        //if(iAttrs.plAutoUpload === "true") {
-        //  uploader.start();
-        //}
       }
 
       function onUploadProgress(up, file) {
