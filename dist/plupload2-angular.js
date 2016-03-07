@@ -143,6 +143,7 @@ delete u.GPSInfoIFDPointer);var t=a.LONG(c.IFD0+12*a.SHORT(c.IFD0)+2);return t&&
 
       if(iAttrs.plChunkSize) {
         options.chunk_size = iAttrs.plChunkSize;
+        options.max_retries = parseInt(iAttrs.plMaxRetries, 10) || 0;
       }
 
       /******

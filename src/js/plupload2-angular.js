@@ -100,6 +100,7 @@
 
       if(iAttrs.plChunkSize) {
         options.chunk_size = iAttrs.plChunkSize;
+        options.max_retries = parseInt(iAttrs.plMaxRetries, 10) || 0;
       }
 
       /******
