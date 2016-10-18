@@ -2362,7 +2362,7 @@ window.plupload = plupload;
     })
     .directive('plUpload', plUpload);
 
-  plUpload.inject = ['$timeout', 'plUploadService'];
+  plUpload.$inject = ['$timeout', 'plUploadService'];
 
   function plUpload($timeout, plUploadService) {
     var directive = {
@@ -2482,7 +2482,7 @@ window.plupload = plupload;
       * @param {Array} files
       */
       function onFilesAdded(up, files) {
-        scope.$apply(function() {
+        $timeout(function() {
           if(iAttrs.plAreAllCompleted) {
             scope.plAreAllCompleted = false;
           }
@@ -2496,9 +2496,9 @@ window.plupload = plupload;
 
             })
           }
-        });
 
-        scope.plOnFilesAdded({uploader: up, files: files});
+          scope.plOnFilesAdded({uploader: up, files: files});
+        });
       }
 
       function onUploadProgress(up, file) {
